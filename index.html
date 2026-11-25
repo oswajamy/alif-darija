@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alif. Darija od zera</title>
+<meta name="theme-color" content="#22427A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#18222F; --muted:#56667B;
+  --lapis:#22427A; --tile:#137577; --saffron:#B57A0C; --line:#D6DEE8;
+  --ok:#137577; --bad:#B23A3A; --on-accent:#FFFFFF;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1622; --surface:#16213A; --ink:#E6ECF5; --muted:#9BABC1;
+    --lapis:#93B3EC; --tile:#52C4C1; --saffron:#EAB54E; --line:#28375280;
+    --ok:#52C4C1; --bad:#F07C7C; --on-accent:#0E1622;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1622; --surface:#16213A; --ink:#E6ECF5; --muted:#9BABC1;
+  --lapis:#93B3EC; --tile:#52C4C1; --saffron:#EAB54E; --line:#28375280;
+  --ok:#52C4C1; --bad:#F07C7C; --on-accent:#0E1622;
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:300;line-height:1.55;font-size:16px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.ar{font-family:"Amiri","Noto Naskh Arabic","Geeza Pro","Arial",serif;direction:rtl;unicode-bidi:isolate}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px 0}
+.logo{font-size:44px;line-height:1;color:var(--lapis);width:36px;text-align:center;margin-top:-6px}
+.bar h1{font-size:17px;font-weight:500;margin:0}
+.bar p{margin:0;font-size:13px;color:var(--muted)}
+nav{max-width:760px;margin:0 auto;display:flex;gap:4px;padding:8px 12px 0;overflow-x:auto}
+nav a{flex:1;text-align:center;text-decoration:none;color:var(--muted);padding:8px 10px 10px;font-size:15px;font-weight:400;border-bottom:3px solid transparent;white-space:nowrap}
+nav a[aria-current="page"]{color:var(--lapis);border-color:var(--lapis);font-weight:500}
+
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+section[hidden]{display:none}
+h2{font-size:22px;font-weight:500;margin:4px 0 6px}
+.lead{color:var(--muted);margin:0 0 20px;max-width:60ch}
+
+/* Plan */
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:0 0 6px}
+.progress i{display:block;height:100%;background:var(--tile);width:0;transition:width .3s}
+.progress-label{font-size:13px;color:var(--muted);margin:0 0 22px}
+.stage{display:grid;grid-template-columns:40px 1fr;gap:0 14px;padding-bottom:26px;position:relative}
+.stage::before{content:"";position:absolute;left:19px;top:40px;bottom:0;width:2px;background:var(--line)}
+.stage:last-child::before{display:none}
+.num{width:40px;height:40px;border-radius:50%;border:2px solid var(--lapis);color:var(--lapis);display:grid;place-items:center;font-weight:500;background:var(--bg);position:relative}
+.stage.complete .num{background:var(--tile);border-color:var(--tile);color:var(--on-accent)}
+.stage h3{margin:6px 0 2px;font-size:17px;font-weight:500}
+.when{font-size:13px;color:var(--muted);margin:0 0 8px}
+.stage .goal{margin:0 0 10px}
+.lessons{list-style:none;margin:0;padding:0}
+.lessons label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
+.lessons input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--tile);flex:none}
+.lessons .done span{color:var(--muted);text-decoration:line-through}
+.lessons .ar{font-size:20px}
+.practice{display:inline-block;margin-top:6px;font-size:14px;color:var(--lapis);font-weight:500}
+.routine{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:28px}
+.routine h3{margin:0 0 6px;font-size:16px;font-weight:500}
+.routine p{margin:0;color:var(--muted)}
+
+/* Alfabet */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;direction:rtl}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 4px 6px;text-align:center;direction:ltr}
+.tile .ar{display:block;font-size:40px;line-height:1.3;color:var(--lapis)}
+.tile small{color:var(--muted);font-size:13px}
+.tile.known{border-color:var(--tile)}
+.tile.known small{color:var(--tile)}
+.legend{font-size:13px;color:var(--muted);margin:14px 0 0}
+
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(10,16,26,.5);display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none}
+.panel{background:var(--surface);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto}
+@media (min-width:640px){.sheet{align-items:center}.panel{border-radius:20px}}
+.panel-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.big{font-size:110px;line-height:1.1;color:var(--lapis)}
+.close{background:none;border:1px solid var(--line);border-radius:50%;width:40px;height:40px;font-size:20px}
+.forms{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;direction:rtl;margin:10px 0 16px}
+.forms div{border:1px solid var(--line);border-radius:10px;text-align:center;padding:4px 2px;direction:ltr}
+.forms .ar{display:block;font-size:38px;line-height:1.4}
+.forms small{font-size:12px;color:var(--muted)}
+.facts{margin:0 0 14px}
+.facts dt{font-size:13px;color:var(--muted)}
+.facts dd{margin:0 0 10px}
+.example{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.example .ar{font-size:34px}
+
+.btn{border:1.5px solid var(--lapis);background:transparent;color:var(--lapis);border-radius:999px;padding:9px 18px;font-weight:500}
+.btn.solid{background:var(--lapis);color:var(--on-accent)}
+.btn.good{border-color:var(--tile);background:var(--tile);color:var(--on-accent)}
+.speak{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px}
+.note{font-size:13px;color:var(--muted);margin:8px 0 0;min-height:1em}
+
+/* Fiszki */
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-size:15px}
+.seg button[aria-pressed="true"]{border-color:var(--lapis);background:var(--lapis);color:var(--on-accent)}
+.deck-info{font-size:14px;color:var(--muted);margin:0 0 12px}
+.card{perspective:1200px;height:300px;margin-bottom:16px}
+.card-inner{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d;cursor:pointer}
+.card.flipped .card-inner{transform:rotateY(180deg)}
+@media (prefers-reduced-motion:reduce){.card-inner{transition:none}}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.face.back{transform:rotateY(180deg)}
+.face .ar{font-size:96px;line-height:1.3;color:var(--lapis)}
+.face .ar.long{font-size:48px}
+.face .hint{position:absolute;bottom:14px;font-size:13px;color:var(--muted)}
+.face .tr{font-size:26px;font-weight:500;margin:0}
+.face .pl{font-size:18px;color:var(--muted);margin:6px 0 0;max-width:34ch}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.empty{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:36px 20px;text-align:center}
+.empty p{margin:0 0 16px}
+
+/* Quiz */
+.q-ar{font-size:90px;line-height:1.3;text-align:center;color:var(--lapis);background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px;margin:0 0 14px}
+.q-ar.long{font-size:52px;padding:30px 14px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.options button{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:16px 10px;font-size:17px;font-weight:400;min-height:64px}
+.options button.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--surface))}
+.options button.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
+.q-meta{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin:0 0 10px}
+.feedback{min-height:52px;margin:14px 0 6px;text-align:center}
+.result{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:30px 20px}
+.result .score{font-size:56px;font-weight:600;color:var(--lapis);margin:0}
+.result p{margin:4px 0 18px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="logo ar" aria-hidden="true">ا</div>
+    <div><h1>Alif. Darija od zera</h1><p>Marokański arabski dla Polaków</p></div>
+  </div>
+  <nav aria-label="Sekcje">
+    <a href="#plan">Plan</a>
+    <a href="#alfabet">Alfabet</a>
+    <a href="#fiszki">Fiszki</a>
+    <a href="#quiz">Quiz</a>
+  </nav>
+</header>
+
+<main>
+  <section id="v-plan">
+    <h2>Plan na 12 tygodni</h2>
+    <p class="lead">Od pierwszej litery do rozmowy na marokańskim suku. Odhaczaj tematy, a postęp zapisze się w tej przeglądarce.</p>
+    <div class="progress" aria-hidden="true"><i id="plan-bar"></i></div>
+    <p class="progress-label" id="plan-label"></p>
+    <div class="routine">
+      <h3>Codziennie 20–30 minut</h3>
+      <p>10 minut fiszek, 10 minut pisania liter ręcznie w zeszycie (od prawej do lewej) i 5–10 minut słuchania: nagrań, wymowy w aplikacji albo krótkich marokańskich filmików z napisami.</p>
+    </div>
+    <div id="stages"></div>
+  </section>
+
+  <section id="v-alfabet" hidden>
+    <h2>Alfabet</h2>
+    <p class="lead">28 liter, czytanych od prawej do lewej. Dotknij litery, by zobaczyć jej cztery formy, wymowę i przykładowe słowo.</p>
+    <div class="grid" id="grid"></div>
+    <p class="legend">Turkusowa ramka oznacza literę oznaczoną w fiszkach jako opanowaną.</p>
+  </section>
+
+  <section id="v-fiszki" hidden>
+    <h2>Fiszki</h2>
+    <p class="lead">Dotknij karty, żeby ją odwrócić. „Umiem” odkłada kartę, „Jeszcze raz” przesuwa ją na koniec talii. Syntezator mowy czyta bliżej fuṣḥā niż dariji, więc kieruj się transkrypcją.</p>
+    <div class="seg" role="group" aria-label="Talia" id="deck-seg">
+      <button data-deck="litery" aria-pressed="true">Litery</button>
+      <button data-deck="slowka" aria-pressed="false">Słówka</button>
+      <button data-deck="zwroty" aria-pressed="false">Zwroty</button>
+    </div>
+    <p class="deck-info" id="deck-info"></p>
+    <div id="card-area"></div>
+  </section>
+
+  <section id="v-quiz" hidden>
+    <h2>Quiz</h2>
+    <p class="lead">10 pytań z czterema odpowiedziami. Wybierz, co ćwiczysz.</p>
+    <div class="seg" role="group" aria-label="Rodzaj quizu" id="quiz-seg">
+      <button data-mode="litery" aria-pressed="true">Litera i dźwięk</button>
+      <button data-mode="slowka" aria-pressed="false">Słowo i znaczenie</button>
+      <button data-mode="zwroty" aria-pressed="false">Zwroty</button>
+    </div>
+    <div id="quiz-area"></div>
+  </section>
+</main>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="panel" id="panel"></div>
+</div>
+
+<script>
+const LETTERS = [
+ ["ا","alif","ā / a","Nośnik samogłoski: długie „a” albo podpórka dla hamzy.",false,"أتاي","atay","herbata miętowa"],
+ ["ب","bā’","b","Jak polskie „b”.",true,"باب","bab","drzwi"],
+ ["ت","tā’","t","Jak polskie „t”.",true,"تفاح","teffaḥ","jabłka"],
+ ["ث","thā’","th (t)","W fuṣḥā jak angielskie „th” w „think”. W dariji zwykle jak zwykłe „t”.",true,"ثلج","telj","śnieg"],
+ ["ج","jīm","j (ż)","W Maroku jak polskie „ż” w „żaba”. W fuṣḥā jak „dż”.",true,"جمل","jmel","wielbłąd"],
+ ["ح","ḥā’","ḥ","Mocne „h” z zaciśniętego gardła, jakby chuchnąć na okulary. Bez chrypienia. W pisowni czatowej: 7.",true,"حوت","ḥut","ryba"],
+ ["خ","khā’","kh","Dokładnie polskie „ch” w „chleb”. Ten dźwięk masz za darmo.",true,"خبز","khobz","chleb"],
+ ["د","dāl","d","Jak polskie „d”.",false,"دار","dar","dom"],
+ ["ذ","dhāl","dh (d)","W fuṣḥā jak angielskie „th” w „this”. W dariji zwykle jak „d”.",false,"ذهب","dheb","złoto"],
+ ["ر","rā’","r","Wibrujące „r”, jak polskie.",false,"راجل","rajel","mężczyzna"],
+ ["ز","zāy","z","Jak polskie „z”.",false,"زيت","zit","oliwa"],
+ ["س","sīn","s","Jak polskie „s”.",true,"سوق","suq","targ"],
+ ["ش","shīn","sh","Jak polskie „sz”.",true,"شمس","shems","słońce"],
+ ["ص","ṣād","ṣ","„Ciemne”, twarde „s”: tył języka uniesiony, sąsiednie samogłoski brzmią głębiej.",true,"صباح","ṣbaḥ","poranek"],
+ ["ض","ḍād","ḍ","Ciemne, twarde „d”.",true,"ضو","ḍu","światło"],
+ ["ط","ṭā’","ṭ","Ciemne, twarde „t”.",true,"طاجين","ṭajin","tadżin"],
+ ["ظ","ẓā’","ẓ (ḍ)","W fuṣḥā ciemne „dh”. W dariji wymawiane jak ḍ.",true,"ظهر","ḍher","plecy"],
+ ["ع","‘ayn","‘","Dźwięczne zaciśnięcie gardła, bez odpowiednika w polskim. Ćwicz ze słuchu. W pisowni czatowej: 3.",true,"عين","‘in","oko"],
+ ["غ","ghayn","gh","Jak francuskie gardłowe „r” w „Paris”.",true,"غدا","ghedda","jutro"],
+ ["ف","fā’","f","Jak polskie „f”.",true,"فلوس","flus","pieniądze"],
+ ["ق","qāf","q","„K” wymawiane głęboko, przy samym języczku. W części Maroka brzmi jak „g”. W pisowni czatowej: 9.",true,"قهوة","qehwa","kawa"],
+ ["ك","kāf","k","Jak polskie „k”.",true,"كاس","kas","szklanka"],
+ ["ل","lām","l","Jasne „l”, jak polskie.",true,"ليل","lil","noc"],
+ ["م","mīm","m","Jak polskie „m”.",true,"مزيان","mzyan","dobry"],
+ ["ن","nūn","n","Jak polskie „n”.",true,"نعناع","na‘na‘","mięta"],
+ ["ه","hā’","h","Lekkie, dźwięczne „h”, jak w angielskim „hello”. Słabsze niż polskie „h”.",true,"هنا","hna","tutaj"],
+ ["و","wāw","w / ū","Jak polskie „ł” w „łapa” albo długie „u”.",false,"واخا","wakha","dobrze, OK"],
+ ["ي","yā’","y / ī","Jak polskie „j” albo długie „i”.",true,"يالله","yallah","chodźmy, dalej"]
+].map(([ch,name,tr,pl,conn,word,wtr,wpl])=>({id:"l:"+ch,ch,name,tr,pl,conn,word,wtr,wpl}));
+
+const EXTRA_WORDS = [
+ ["واحد","waḥed","jeden"],["جوج","juj","dwa"],["تلاتة","tlata","trzy"],
+ ["ربعة","rb‘a","cztery"],["خمسة","khamsa","pięć"],["ستة","setta","sześć"],
+ ["سبعة","sb‘a","siedem"],["تمنية","tmenya","osiem"],["تسعود","tes‘ud","dziewięć"],
+ ["عشرة","‘ashra","dziesięć"],["أنا","ana","ja"],["نتا","nta","ty (do mężczyzny)"],
+ ["نتي","nti","ty (do kobiety)"],["هو","huwa","on"],["هي","hiya","ona"],
+ ["بزاف","bezzaf","dużo, bardzo"],["شوية","shwiya","trochę"],["زوين","zwin","ładny"],
+ ["بغيت","bghit","chcę"],["دابا","daba","teraz"],["فين","fin","gdzie"],
+ ["شحال","shḥal","ile"],["كاين","kayn","jest, są"],["كبير","kbir","duży"],["صغير","sghir","mały"]
+];
+const WORDS = LETTERS.map(l=>({id:"w:"+l.word,ar:l.word,tr:l.wtr,pl:l.wpl}))
+  .concat(EXTRA_WORDS.map(([ar,tr,pl])=>({id:"w:"+ar,ar,tr,pl})));
+
+const PHRASES = [
+ ["السلام عليكم","salamu ‘alikum","Dzień dobry (dosł. pokój z wami)"],
+ ["مرحبا","marḥba","Witaj"],
+ ["لاباس؟","labas?","Wszystko dobrze? Co słychać?"],
+ ["لاباس، الحمد لله","labas, lḥamdulillah","Dobrze, dzięki Bogu"],
+ ["كي داير؟","kidayr?","Jak się masz? (do mężczyzny)"],
+ ["كي دايرة؟","kidayra?","Jak się masz? (do kobiety)"],
+ ["شكرا","shukran","Dziękuję"],
+ ["عافاك","‘afak","Proszę (prosząc o coś)"],
+ ["الله يخليك","llah ykhallik","Bardzo proszę, uprzejmie dziękuję"],
+ ["إيه","iyeh","Tak"],
+ ["لا","la","Nie"],
+ ["شنو سميتك؟","shnu smiytek?","Jak masz na imię?"],
+ ["سميتي ...","smiyti …","Mam na imię …"],
+ ["أنا من بولونيا","ana men bulunya","Jestem z Polski"],
+ ["بشحال هادا؟","bshḥal hada?","Ile to kosztuje?"],
+ ["ما فهمتش","ma fhemtsh","Nie rozumiem"],
+ ["بشوية عافاك","bshwiya ‘afak","Wolniej, proszę"],
+ ["بسلامة","bslama","Do widzenia"]
+].map(([ar,tr,pl])=>({id:"p:"+ar,ar,tr,pl}));
+
+const STAGES = [
+ {t:"Alfabet, część 1",w:"Tydzień 1",g:"Szyldy, menu i nazwy ulic w Maroku są po arabsku (obok francuskiego), więc zaczynamy od pisma.",
+  l:["Pismo od prawej do lewej i cztery formy litery","Rodzina „łódki”: <span class='ar'>ب ت ث ن ي</span>","Sześć liter, które nie łączą się w lewo: <span class='ar'>ا د ذ ر ز و</span>","Pisanie własnego imienia po arabsku"],p:"alfabet"},
+ {t:"Alfabet, część 2",w:"Tydzień 2",g:"Reszta liter i ich marokańska wymowa: <span class='ar'>ج</span> brzmi jak polskie „ż”.",
+  l:["<span class='ar'>ج ح خ</span> oraz <span class='ar'>س ش</span>","<span class='ar'>ص ض ط ظ</span>: litery emfatyczne","<span class='ar'>ع غ ف ق</span>","<span class='ar'>ك ل م ه</span> i połączenie <span class='ar'>لا</span>"],p:"alfabet"},
+ {t:"Jak się pisze dariję",w:"Tydzień 3",g:"Darija nie ma jednej oficjalnej pisowni. Marokańczycy piszą ją literami arabskimi albo łacińskimi z cyframi zamiast trudnych głosek.",
+  l:["Długie samogłoski ā, ī, ū i krótkie znaki","Pisownia czatowa: 3 = <span class='ar'>ع</span>, 7 = <span class='ar'>ح</span>, 9 = <span class='ar'>ق</span>","Zbitki spółgłosek: darija gubi samogłoski (ktab, mzyan)","Czym darija różni się od fuṣḥā"]},
+ {t:"Trudne głoski",w:"Tydzień 4",g:"Polak ma przewagę: „ch”, „sz”, „ż” i wibrujące „r” już zna. Ćwiczymy resztę.",
+  l:["Gardłowe <span class='ar'>ح</span> i <span class='ar'>ع</span>","Emfatyczne kontra zwykłe: <span class='ar'>س/ص, د/ض, ت/ط</span>","<span class='ar'>ق</span> kontra <span class='ar'>ك</span>, a w niektórych regionach „g”","Trzy „h”: <span class='ar'>ه ح خ</span>"],p:"quiz"},
+ {t:"Przetrwanie w Maroku",w:"Tygodnie 5–6",g:"To, czego użyjesz pierwszego dnia: powitania, uprzejmości, liczby i ceny.",
+  l:["Powitania: salamu ‘alikum, labas, kidayr","Uprzejmości: ‘afak, shukran, llah ykhallik","Liczby 1–10 (dwa to juj!)","Na suku: bshḥal hada? i targowanie się"],p:"fiszki"},
+ {t:"Pierwsze zdania",w:"Tygodnie 7–8",g:"Jak w fuṣḥā, w czasie teraźniejszym nie ma „być”: ana men bulunya to „jestem z Polski”.",
+  l:["Zaimki: ana, nta, nti, huwa, hiya","Zdanie bez „być”: ana men bulunya","Przeczenie ma…sh: ma fhemtsh, ma kaynsh","Pytania: ash/shnu (co), fin (gdzie), shkun (kto), shḥal (ile)"]},
+ {t:"Codzienne czasowniki",w:"Tygodnie 9–10",g:"Kilka czasowników wystarczy, żeby zamówić, zapytać i opowiedzieć o sobie.",
+  l:["bghit (chcę) i kayn (jest, są)","Czas teraźniejszy z ka-: kanakul (jem), kanshreb (piję)","Czas przeszły: klit (zjadłem), shrebt (wypiłem)","W kawiarni: atay, qehwa, l-ḥsab ‘afak (rachunek, proszę)"],p:"fiszki"},
+ {t:"Żywy język",w:"Tygodnie 11–12",g:"Darija pożycza słowa z francuskiego, hiszpańskiego i języków berberyjskich. Czas słuchać prawdziwych rozmów.",
+  l:["Zapożyczenia: ṭomobil (auto), kuzina (kuchnia)","Słuchanie: marokańskie filmiki i seriale","Krótka rozmowa o sobie i rodzinie","Powtórka całości"]}
+];
+
+// storage
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const known = new Set(load("ar-known",[]));
+const done = new Set(load("ar-plan",[]));
+const persistKnown=()=>save("ar-known",[...known]);
+
+// speech
+let arVoice=null;
+function findVoice(){if(!("speechSynthesis" in window))return;const vs=speechSynthesis.getVoices();arVoice=vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("ar-ma"))||vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("ar"))||null}
+if("speechSynthesis" in window){findVoice();speechSynthesis.onvoiceschanged=findVoice}
+function speak(text,noteEl){
+  if(!("speechSynthesis" in window)){if(noteEl)noteEl.textContent="Ta przeglądarka nie odtwarza mowy.";return}
+  findVoice();
+  if(!arVoice&&noteEl)noteEl.textContent="Brak arabskiego głosu na tym urządzeniu. Dodasz go w ustawieniach mowy systemu.";
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text.replace("...",""));u.lang="ar-MA";u.rate=.8;if(arVoice)u.voice=arVoice;
+  speechSynthesis.speak(u);
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// PLAN
+function renderPlan(){
+  const host=document.getElementById("stages");host.innerHTML="";
+  let total=0,checked=0;
+  STAGES.forEach((s,si)=>{
+    const ids=s.l.map((_,li)=>si+"-"+li);
+    const n=ids.filter(id=>done.has(id)).length;total+=ids.length;checked+=n;
+    const el=document.createElement("div");
+    el.className="stage"+(n===ids.length?" complete":"");
+    el.innerHTML=`<div class="num">${n===ids.length?"✓":si+1}</div><div>
+      <h3>${s.t}</h3><p class="when">${s.w}</p><p class="goal">${s.g}</p>
+      <ul class="lessons">${s.l.map((txt,li)=>{const id=si+"-"+li;return `<li><label class="${done.has(id)?"done":""}"><input type="checkbox" data-id="${id}" ${done.has(id)?"checked":""}><span>${txt}</span></label></li>`}).join("")}</ul>
+      ${s.p?`<a class="practice" href="#${s.p}">Ćwicz: ${{alfabet:"alfabet",fiszki:"fiszki",quiz:"quiz"}[s.p]}</a>`:""}
+    </div>`;
+    host.appendChild(el);
+  });
+  document.getElementById("plan-bar").style.width=(checked/total*100)+"%";
+  document.getElementById("plan-label").textContent=`Ukończone tematy: ${checked} z ${total}`;
+}
+document.getElementById("stages").addEventListener("change",e=>{
+  const id=e.target.dataset.id;if(!id)return;
+  e.target.checked?done.add(id):done.delete(id);save("ar-plan",[...done]);renderPlan();
+});
+
+// ALFABET
+function forms(l){
+  const Z="\u200D";
+  return l.conn?[l.ch,l.ch+Z,Z+l.ch+Z,Z+l.ch]:[l.ch,l.ch,Z+l.ch,Z+l.ch];
+}
+function renderGrid(){
+  document.getElementById("grid").innerHTML=LETTERS.map((l,i)=>
+    `<button class="tile${known.has(l.id)?" known":""}" data-i="${i}" aria-label="Litera ${l.name}"><span class="ar">${l.ch}</span><small>${l.tr}</small></button>`).join("");
+}
+document.getElementById("grid").addEventListener("click",e=>{
+  const b=e.target.closest(".tile");if(b)openLetter(+b.dataset.i);
+});
+const sheet=document.getElementById("sheet"),panel=document.getElementById("panel");
+let lastFocus=null;
+function openLetter(i){
+  const l=LETTERS[i],f=forms(l),labels=["osobno","na początku","w środku","na końcu"];
+  panel.innerHTML=`<div class="panel-top"><div><h2 id="sheet-title">${l.name}</h2><p class="when">Transkrypcja: ${l.tr}${l.conn?"":" · nie łączy się z literą po lewej"}</p></div>
+    <button class="close" data-close aria-label="Zamknij">×</button></div>
+    <div class="big ar" style="text-align:center">${l.ch}</div>
+    <div class="forms">${f.map((x,k)=>`<div><span class="ar">${x}</span><small>${labels[k]}</small></div>`).join("")}</div>
+    <dl class="facts"><dt>Jak wymawiać</dt><dd>${l.pl}</dd></dl>
+    <div class="example"><div><span class="ar">${l.word}</span><div>${l.wtr}, ${l.wpl}</div></div>
+    <button class="speak" data-say="${esc(l.word)}">🔊 Posłuchaj</button></div>
+    <p class="note" id="sheet-note"></p>`;
+  lastFocus=document.activeElement;sheet.hidden=false;panel.querySelector(".close").focus();
+}
+function closeSheet(){sheet.hidden=true;if(lastFocus)lastFocus.focus()}
+sheet.addEventListener("click",e=>{
+  if(e.target===sheet||e.target.closest("[data-close]"))closeSheet();
+  const s=e.target.closest("[data-say]");if(s)speak(s.dataset.say,document.getElementById("sheet-note"));
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet()});
+
+// FISZKI
+const DECKS={
+  litery:LETTERS.map(l=>({id:l.id,ar:l.ch,tr:`${l.name} · ${l.tr}`,pl:l.pl,say:l.ch})),
+  slowka:WORDS.map(w=>({id:w.id,ar:w.ar,tr:w.tr,pl:w.pl,say:w.ar})),
+  zwroty:PHRASES.map(p=>({id:p.id,ar:p.ar,tr:p.tr,pl:p.pl,say:p.ar}))
+};
+let deckName="litery",queue=[];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function startDeck(name){
+  deckName=name;
+  document.querySelectorAll("#deck-seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.deck===name));
+  queue=shuffle(DECKS[name].filter(c=>!known.has(c.id)));renderCard();
+}
+function renderCard(){
+  const all=DECKS[deckName],k=all.filter(c=>known.has(c.id)).length;
+  document.getElementById("deck-info").textContent=`Opanowane: ${k} z ${all.length}`;
+  const area=document.getElementById("card-area");
+  if(!queue.length){
+    area.innerHTML=`<div class="empty"><p>Cała talia opanowana. Wróć do niej za kilka dni, żeby sprawdzić, co zostało w pamięci.</p><button class="btn" id="reset-deck">Zacznij talię od nowa</button></div>`;
+    document.getElementById("reset-deck").onclick=()=>{all.forEach(c=>known.delete(c.id));persistKnown();renderGrid();startDeck(deckName)};
+    return;
+  }
+  const c=queue[0],long=c.ar.length>3;
+  area.innerHTML=`<div class="card" id="card" tabindex="0" role="button" aria-label="Odwróć kartę">
+    <div class="card-inner">
+      <div class="face"><span class="ar${long?" long":""}">${c.ar}</span><span class="hint">Dotknij, by odwrócić</span></div>
+      <div class="face back"><p class="tr">${esc(c.tr)}</p><p class="pl">${c.pl}</p></div>
+    </div></div>
+    <div class="actions"><button class="speak" id="say">🔊 Posłuchaj</button><button class="btn" id="again">Jeszcze raz</button><button class="btn good" id="got">Umiem</button></div>
+    <p class="note" id="card-note" style="text-align:center"></p>`;
+  const card=document.getElementById("card");
+  const flip=()=>card.classList.toggle("flipped");
+  card.onclick=flip;card.onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flip()}};
+  document.getElementById("say").onclick=()=>speak(c.say,document.getElementById("card-note"));
+  document.getElementById("again").onclick=()=>{queue.push(queue.shift());renderCard()};
+  document.getElementById("got").onclick=()=>{known.add(c.id);persistKnown();queue.shift();renderGrid();renderCard()};
+}
+document.getElementById("deck-seg").addEventListener("click",e=>{const b=e.target.closest("button");if(b)startDeck(b.dataset.deck)});
+
+// QUIZ
+let qMode="litery",qs=[],qi=0,score=0;
+function pool(mode){
+  if(mode==="litery")return LETTERS.map(l=>({ar:l.ch,ans:`${l.tr} (${l.name})`}));
+  if(mode==="slowka")return WORDS.map(w=>({ar:w.ar,ans:w.pl}));
+  return PHRASES.map(p=>({ar:p.ar,ans:p.pl}));
+}
+function startQuiz(mode){
+  qMode=mode;
+  document.querySelectorAll("#quiz-seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode));
+  const p=pool(mode);
+  qs=shuffle([...p]).slice(0,10).map(q=>{
+    const wrong=shuffle(p.filter(x=>x.ans!==q.ans)).slice(0,3).map(x=>x.ans);
+    return {ar:q.ar,ans:q.ans,opts:shuffle([q.ans,...wrong])};
+  });
+  qi=0;score=0;renderQ();
+}
+function renderQ(){
+  const area=document.getElementById("quiz-area");
+  if(qi>=qs.length){
+    const msg=score>=9?"Świetnie. Ten zestaw masz opanowany.":score>=6?"Dobrze idzie. Powtórz fiszki z pomyłkami.":"Wróć do fiszek z tej kategorii i spróbuj ponownie.";
+    area.innerHTML=`<div class="result"><p class="score">${score}/10</p><p>${msg}</p><button class="btn solid" id="again-q">Zagraj jeszcze raz</button></div>`;
+    document.getElementById("again-q").onclick=()=>startQuiz(qMode);return;
+  }
+  const q=qs[qi],long=q.ar.length>3;
+  area.innerHTML=`<div class="q-meta"><span>Pytanie ${qi+1} z 10</span><span>Wynik: ${score}</span></div>
+    <div class="q-ar ar${long?" long":""}">${q.ar}</div>
+    <div class="options">${q.opts.map(o=>`<button>${esc(o)}</button>`).join("")}</div>
+    <div class="feedback" id="fb"></div>`;
+  area.querySelectorAll(".options button").forEach(b=>b.onclick=()=>{
+    const ok=b.textContent===q.ans;if(ok)score++;
+    area.querySelectorAll(".options button").forEach(x=>{x.disabled=true;if(x.textContent===q.ans)x.classList.add("right")});
+    if(!ok)b.classList.add("wrong");
+    document.getElementById("fb").innerHTML=`<p style="margin:0 0 10px">${ok?"Dobrze!":"Prawidłowo: "+esc(q.ans)}</p><button class="btn solid" id="next">${qi<9?"Następne pytanie":"Pokaż wynik"}</button>`;
+    const n=document.getElementById("next");n.focus();n.onclick=()=>{qi++;renderQ()};
+  });
+}
+document.getElementById("quiz-seg").addEventListener("click",e=>{const b=e.target.closest("button");if(b)startQuiz(b.dataset.mode)});
+
+// ROUTING
+const VIEWS=["plan","alfabet","fiszki","quiz"];
+function route(){
+  const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"plan";
+  VIEWS.forEach(x=>document.getElementById("v-"+x).hidden=x!==v);
+  document.querySelectorAll("nav a").forEach(a=>a.getAttribute("href")==="#"+v?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+
+renderPlan();renderGrid();startDeck("litery");startQuiz("litery");route();
+if("serviceWorker" in navigator&&location.protocol!=="file:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+</body>
+</html>

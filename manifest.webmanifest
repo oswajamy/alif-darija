@@ -1,0 +1,16 @@
+{
+  "name": "Alif. Darija od zera",
+  "short_name": "Alif",
+  "description": "Marokański arabski (darija) dla Polaków: plan nauki, alfabet, fiszki i quiz.",
+  "lang": "pl",
+  "start_url": "./index.html#plan",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2F5F9",
+  "theme_color": "#22427A",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable"}
+  ]
+}
